@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatbotController {
     private final ChatbotService chatbotService;
 
+    //chatbot 프로필 상세조회 api
     @GetMapping("/{chatbot-id}")
     public ResponseJson<ChatbotProfileDTO> getChatbotProfile(
             @PathVariable(name = "chatbot-id") String chatbotId
