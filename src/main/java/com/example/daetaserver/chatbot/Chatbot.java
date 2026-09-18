@@ -15,11 +15,13 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class Chatbot extends IdEntity {
     //클라이언트에서 필요한 정보
+
+    //챗봇 이름
     @Column(length = 10, nullable = false)
     private String name;
-
+    //프로필 사진 url
     private String profileURL;
-
+    //챗봇 설명
     @Column(nullable = false)
     private String information;
 
