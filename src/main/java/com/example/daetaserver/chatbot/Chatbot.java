@@ -26,12 +26,13 @@ public class Chatbot extends IdEntity {
     private String information;
 
     //ai에서 추가적으로 필요한 정보
+    //담당 과목
     @Column(nullable = false)
     private String subject;
-
+    //성격
     @Column(nullable = false)
     private String MBTI;
-
+    //기본 프롬프트
     @Column(nullable = false)
     private String prompt;
 }
