@@ -10,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @MappedSuperclass
 @Getter
-@Entity
 @NoArgsConstructor
 public class IdEntity {
     @Id
