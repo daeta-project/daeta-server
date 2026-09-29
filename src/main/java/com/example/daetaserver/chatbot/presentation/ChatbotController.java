@@ -16,9 +16,9 @@ public class ChatbotController {
     private final ChatbotService chatbotService;
 
     //chatbot 프로필 상세조회 api
-    @GetMapping("/{chatbot-id}")
+    @GetMapping("/{chatbotId}")
     public ResponseJson<ChatbotProfileDTO> getChatbotProfile(
-            @PathVariable(name = "chatbot-id") String chatbotId
+            @PathVariable String chatbotId
     ){
         return ResponseJson.success(chatbotService.getChatbotProfile(chatbotId));
     }
