@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .cors(cors->cors.configurationSource(configurationSource()))
                 .csrf(csrf-> csrf.disable())
                 .authorizeHttpRequests(auth-> auth
-                        .anyRequest().denyAll() //기본적으로 모든 접근 차단
+                        .anyRequest().permitAll() //기본적으로 모든 접근 허용
                 );
 
         return http.build();
