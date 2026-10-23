@@ -12,7 +12,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ResponseJson<Map<String,?>>> customExceptionHandler(CustomException e){
+    public ResponseEntity<ResponseJson<Map<String,String>>> customExceptionHandler(CustomException e){
         ErrorCode errorCode = e.getErrorCode();
         return ResponseEntity
                 .status(errorCode.getStatus())

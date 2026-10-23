@@ -16,9 +16,9 @@ public class ResponseJson <T>{
                 .success(true)
                 .build();
     }
-    public static ResponseJson<Map<String,?>> error(ErrorCode errorCode){
+    public static ResponseJson<Map<String,String>> error(ErrorCode errorCode){
         return ResponseJson.<Map<String,?>>builder()
-                .data(Map.of("status", errorCode.getStatus(), "message", errorCode.getMessage()))
+                .data(Map.of("status", errorCode.getStatus().toString(), "message", errorCode.getMessage()))
                 .success(false)
                 .build();
     }
