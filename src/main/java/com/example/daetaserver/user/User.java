@@ -2,6 +2,7 @@ package com.example.daetaserver.user;
 
 import com.example.daetaserver.global.common.IdEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
+@Entity
 @SuperBuilder
 @Table(name = "users")
 public class User extends IdEntity {
