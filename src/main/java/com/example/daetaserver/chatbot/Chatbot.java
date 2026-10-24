@@ -1,20 +1,26 @@
 package com.example.daetaserver.chatbot;
 
-import com.example.daetaserver.global.common.IdEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 @Getter
-public class Chatbot extends IdEntity {
+public class Chatbot{
     //클라이언트에서 필요한 정보
+    //기본키
+    @Id
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
 
     //챗봇 이름
     @Column(length = 10, nullable = false)

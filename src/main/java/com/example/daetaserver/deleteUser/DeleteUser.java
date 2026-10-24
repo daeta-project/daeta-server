@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -15,7 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 public class DeleteUser {
     @Id
-    String id;
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
 
     @MapsId
     @OneToOne
