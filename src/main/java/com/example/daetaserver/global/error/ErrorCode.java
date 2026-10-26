@@ -11,6 +11,8 @@ public enum ErrorCode {
 
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "해당하는 유저를 찾을 수 없습니다"),
 
+    EXIST_CHATROOM(HttpStatus.CONFLICT, "이미 존재하는 채팅방이 있습니다"),
+
     NOT_FOUND_CHATBOT(HttpStatus.NOT_FOUND, "해당하는 챗봇을 찾을 수 없습니다"),
 
     NOT_FOUND_WAY(HttpStatus.INTERNAL_SERVER_ERROR, "해당 방법을 찾을 수 없음"),
