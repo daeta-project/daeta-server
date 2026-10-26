@@ -1,3 +1,5 @@
 spring:
   application:
     name: daetaServer
+jwt:
+  secret-key: ${SECRET_KEY}
