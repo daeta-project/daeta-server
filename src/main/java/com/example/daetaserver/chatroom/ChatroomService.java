@@ -1,12 +1,15 @@
 package com.example.daetaserver.chatroom;
 
 import com.example.daetaserver.chatbot.ChatbotRepository;
+import com.example.daetaserver.chatroom.presentation.dto.ReadChatroomDTO;
 import com.example.daetaserver.global.error.CustomException;
 import com.example.daetaserver.global.error.ErrorCode;
 import com.example.daetaserver.global.security.JWT.TokenManager;
 import com.example.daetaserver.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,4 +33,9 @@ public class ChatroomService {
         chatroomRepository.save(chatroom);
     }
 
+    public List<ReadChatroomDTO> getByUser(String token){
+        final String userId = tokenManager.getSubject(token);
+
+        return chatroomRepository.findAllByUser_Id(userId);
+    }
 }
