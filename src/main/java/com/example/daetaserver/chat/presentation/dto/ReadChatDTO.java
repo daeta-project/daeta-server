@@ -5,13 +5,13 @@ import com.example.daetaserver.chat.Sender;
 
 import java.time.LocalDateTime;
 
-public record ReadChat(
+public record ReadChatDTO(
         String content,
         Sender sender,
         LocalDateTime createAt
 ) {
-    public ReadChat EntityToDTO(Chat chat){
-        return new ReadChat(
+    public ReadChatDTO EntityToDTO(Chat chat){
+        return new ReadChatDTO(
                 chat.getContent(),
                 chat.getSender(),
                 chat.getCreatAt()

@@ -1,6 +1,6 @@
 package com.example.daetaserver.chat;
 
-import com.example.daetaserver.chatroom.presentation.dto.ReadChatDTO;
+import com.example.daetaserver.chat.presentation.dto.ReadChatDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
