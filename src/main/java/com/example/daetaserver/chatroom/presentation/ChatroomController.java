@@ -18,8 +18,9 @@ public class ChatroomController {
     @GetMapping("{id}")
     public ResponseJson<List<ReadChatDTO>> getChat(
             @PathVariable String id,
-            @RequestParam LocalDateTime time
+            @RequestParam LocalDateTime time,
+            @RequestHeader("Authorization") String token
     ){
-        return ResponseJson.success(chatroomService.getChat(time, id));
+        return ResponseJson.success(chatroomService.getChat(token, time, id));
     }
 }

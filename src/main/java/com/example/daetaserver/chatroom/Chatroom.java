@@ -5,6 +5,7 @@ import com.example.daetaserver.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Table(
         uniqueConstraints ={
                 //유저와 챗봇은 서로 하나의 채팅방만 생성 가능함.

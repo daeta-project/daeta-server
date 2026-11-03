@@ -7,6 +7,7 @@ import com.example.daetaserver.chatbot.ChatbotRepository;
 import com.example.daetaserver.global.error.CustomException;
 import com.example.daetaserver.global.error.ErrorCode;
 import com.example.daetaserver.global.security.JWT.TokenManager;
+import com.example.daetaserver.user.User;
 import com.example.daetaserver.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,15 @@ public class ChatroomService {
     }
 
 
-    public List<ReadChatDTO> getChat(LocalDateTime time, String id){
+    public List<ReadChatDTO> getChat(String token, LocalDateTime time, String id){
+        Chatroom chatroom = chatroomRepository.findById(id)
+                .orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
+        User user = userRepository.findById(tokenManager.getSubject(token))
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_USER));
+        if(!chatroom.getUser().equals(user)){
+            throw new CustomException(ErrorCode.IS_NOT_YOUR_CHATROOM);
+        }
+
         if (time==null){
             return chatRepository.findAllByChatroom_IdAndCreatAtAfter(id, time);
         }
