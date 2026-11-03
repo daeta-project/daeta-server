@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true, timeout = 60)
@@ -23,5 +25,9 @@ public class ChatbotService {
                 .profileURL(chatbot.getProfileURL())
                 .information(chatbot.getInformation())
                 .build();
+    }
+
+    public List<ChatbotProfileDTO> getChatbots(){
+        return chatbotRepository.getAllChatbots();
     }
 }
