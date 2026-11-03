@@ -1,6 +1,8 @@
 package com.example.daetaserver.chatroom;
 
 import com.example.daetaserver.chat.Chat;
+import com.example.daetaserver.chat.ChatRepository;
+import com.example.daetaserver.chat.presentation.dto.ReadChatDTO;
 import com.example.daetaserver.chatbot.ChatbotRepository;
 import com.example.daetaserver.global.error.CustomException;
 import com.example.daetaserver.global.error.ErrorCode;
@@ -18,6 +20,7 @@ public class ChatroomService {
     private final ChatroomRepository chatroomRepository;
     private final UserRepository userRepository;
     private final ChatbotRepository chatbotRepository;
+    private final ChatRepository chatRepository;
     private final TokenManager tokenManager;
 
     public void createNewChatroom(String token, String chatbotId){
@@ -32,5 +35,13 @@ public class ChatroomService {
                 .chatbot(chatbotRepository.findById(chatbotId).orElseThrow())
                 .build();
         chatroomRepository.save(chatroom);
+    }
+
+
+    public List<ReadChatDTO> getChat(LocalDateTime time, String id){
+        if (time==null){
+            return chatRepository.findAllByChatroom_IdAndCreatAtAfter(id, time);
+        }
+        return chatRepository.findAllByChatroom_Id(id);
     }
 }

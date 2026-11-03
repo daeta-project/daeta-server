@@ -1,14 +1,12 @@
 package com.example.daetaserver.chatroom.presentation;
 
+import com.example.daetaserver.chat.presentation.dto.ReadChatDTO;
 import com.example.daetaserver.chatroom.ChatroomService;
-import com.example.daetaserver.chatroom.presentation.dto.ReadChatroomDTO;
 import com.example.daetaserver.global.common.ResponseJson;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -17,4 +15,11 @@ import java.util.List;
 public class ChatroomController {
     private final ChatroomService chatroomService;
 
+    @GetMapping("{id}")
+    public ResponseJson<List<ReadChatDTO>> getChat(
+            @PathVariable String id,
+            @RequestParam LocalDateTime time
+    ){
+        return ResponseJson.success(chatroomService.getChat(time, id));
+    }
 }

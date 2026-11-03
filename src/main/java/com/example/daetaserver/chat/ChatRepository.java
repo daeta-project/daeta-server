@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ChatRepository extends JpaRepository<Chat, String> {
     List<ReadChatDTO> findAllByChatroom_IdAndCreatAtAfter(String chatroomId, LocalDateTime creatAtAfter);
+    List<ReadChatDTO> findAllByChatroom_Id(String chatroomId);
 }
