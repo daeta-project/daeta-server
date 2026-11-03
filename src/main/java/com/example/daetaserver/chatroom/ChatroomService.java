@@ -1,7 +1,7 @@
 package com.example.daetaserver.chatroom;
 
+import com.example.daetaserver.chat.Chat;
 import com.example.daetaserver.chatbot.ChatbotRepository;
-import com.example.daetaserver.chatroom.presentation.dto.ReadChatroomDTO;
 import com.example.daetaserver.global.error.CustomException;
 import com.example.daetaserver.global.error.ErrorCode;
 import com.example.daetaserver.global.security.JWT.TokenManager;
@@ -9,6 +9,7 @@ import com.example.daetaserver.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
