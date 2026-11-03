@@ -16,6 +16,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @Builder
+@Getter
 @AllArgsConstructor
 @Table(name = "users")
 public class User {
@@ -26,14 +27,12 @@ public class User {
     private String id = UUID.randomUUID().toString();
     
     //사용자 이름
-    @Getter
     @Column(nullable = false, length = 20)
     private String name;
 
     @Column(nullable = false, unique = true)
     private String email; // 구글 계정 식별용 이메일
 
-    @Getter
     private String profileUrl;
 
     @CreatedDate
