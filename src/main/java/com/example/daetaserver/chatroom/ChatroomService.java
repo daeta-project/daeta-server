@@ -32,10 +32,4 @@ public class ChatroomService {
                 .build();
         chatroomRepository.save(chatroom);
     }
-
-    public List<ReadChatroomDTO> getByUser(String token){
-        final String userId = tokenManager.getSubject(token);
-
-        return chatroomRepository.findAllByUser_Id(userId);
-    }
 }

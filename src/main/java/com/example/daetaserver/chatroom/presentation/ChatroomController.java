@@ -17,10 +17,4 @@ import java.util.List;
 public class ChatroomController {
     private final ChatroomService chatroomService;
 
-    @GetMapping
-    public ResponseJson<List<ReadChatroomDTO>> getByUser(
-            @RequestHeader("Authorization") String token
-    ){
-        return ResponseJson.success(chatroomService.getByUser(token));
-    }
 }
