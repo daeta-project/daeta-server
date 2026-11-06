@@ -2,8 +2,10 @@ package com.example.daetaserver.chatroom.presentation;
 
 import com.example.daetaserver.chat.presentation.dto.ReadChatDTO;
 import com.example.daetaserver.chatroom.ChatroomService;
+import com.example.daetaserver.chatroom.presentation.dto.DeleteChatDTO;
 import com.example.daetaserver.global.common.ResponseJson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -22,5 +24,15 @@ public class ChatroomController {
             @RequestHeader("Authorization") String token
     ){
         return ResponseJson.success(chatroomService.getChat(token, time, id));
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteChat(
+            @PathVariable String id,
+            @RequestBody DeleteChatDTO dto,
+            @RequestHeader("Authorization") String token
+    ){
+        chatroomService.deleteChats(dto, token, id);
     }
 }
