@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -16,8 +17,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 public class Chat {
+    @Builder.Default
     @Id
-    String id;
+    String id = UUID.randomUUID().toString();
 
     @Column(nullable = false)
     String content;
