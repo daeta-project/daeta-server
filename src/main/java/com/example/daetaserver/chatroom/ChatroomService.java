@@ -2,6 +2,7 @@ package com.example.daetaserver.chatroom;
 
 import com.example.daetaserver.chat.Chat;
 import com.example.daetaserver.chat.ChatRepository;
+import com.example.daetaserver.chat.Sender;
 import com.example.daetaserver.chat.presentation.dto.ReadChatDTO;
 import com.example.daetaserver.chatbot.ChatbotRepository;
 import com.example.daetaserver.chatroom.presentation.dto.DeleteChatDTO;
@@ -63,5 +64,17 @@ public class ChatroomService {
         isYourChatroom(id, tokenManager.getSubject(token));
 
         chatRepository.deleteAllByChatroom_IdAndCreatAtBetween(id, dto.startAt(), dto.endAt());
+    }
+
+    //sse에서 사용
+    public void saveChat(String content, String chatroomId){
+        Chatroom chatroom = chatroomRepository.findById(chatroomId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
+        chatRepository.save(Chat.builder()
+                .content(content)
+                .chatroom(chatroom)
+                .sender(Sender.CHATBOT)
+                .build()
+        );
     }
 }
