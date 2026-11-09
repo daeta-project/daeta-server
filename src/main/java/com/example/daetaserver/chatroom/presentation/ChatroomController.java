@@ -30,9 +30,9 @@ public class ChatroomController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteChat(
             @PathVariable String id,
-            @RequestBody DeleteChatDTO dto,
+            @RequestBody DeleteChatDTO deleteChatDTO,
             @RequestHeader("Authorization") String token
     ){
-        chatroomService.deleteChats(dto, token, id);
+        chatroomService.deleteChats(deleteChatDTO, token, id);
     }
 }
