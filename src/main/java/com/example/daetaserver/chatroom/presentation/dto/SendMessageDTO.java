@@ -1,6 +1,6 @@
 package com.example.daetaserver.chatroom.presentation.dto;
 
-public record SendMsgDTO(
+public record SendMessageDTO(
         String message
 ) {
 }

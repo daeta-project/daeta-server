@@ -3,6 +3,7 @@ package com.example.daetaserver.chatroom.presentation;
 import com.example.daetaserver.chat.presentation.dto.ReadChatDTO;
 import com.example.daetaserver.chatroom.ChatroomService;
 import com.example.daetaserver.chatroom.presentation.dto.DeleteChatDTO;
+import com.example.daetaserver.chatroom.presentation.dto.SendMessageDTO;
 import com.example.daetaserver.global.common.ResponseJson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,5 +35,14 @@ public class ChatroomController {
             @RequestHeader("Authorization") String token
     ){
         chatroomService.deleteChats(deleteChatDTO, token, id);
+    }
+
+    @PostMapping("{id}")
+    public void sendChat(
+            @PathVariable String id,
+            @RequestBody SendMessageDTO sendMessageDTO,
+            @RequestHeader("Authorization") String token
+    ){
+        chatroomService.sendChat(token, id, sendMessageDTO);
     }
 }
