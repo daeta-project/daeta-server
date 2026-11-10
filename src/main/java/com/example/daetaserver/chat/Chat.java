@@ -17,9 +17,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 public class Chat {
-    @Builder.Default
     @Id
-    String id = UUID.randomUUID().toString();
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    String id;
 
     @Column(nullable = false)
     String content;
