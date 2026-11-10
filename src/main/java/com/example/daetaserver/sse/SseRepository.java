@@ -14,25 +14,19 @@ public class SseRepository {
 
     private final ChatroomService chatroomService;
 
-    private final Map<String, SseEmitter> emitters =
-            new ConcurrentHashMap<>();
-    private final Map<String, StringBuilder> sendContents =
-            new ConcurrentHashMap<>();
-    private final Map<String, String> chatroomIds =
-            new ConcurrentHashMap<>();
+    private final Map<String, Sse> sseMap = new ConcurrentHashMap<>();
 
     public void save(String userId, SseEmitter emitter, String chatroomId) {
-        emitters.put(userId, emitter);
-        sendContents.put(userId, new StringBuilder());
-        chatroomIds.put(userId, chatroomId);
+        Sse sse = new Sse(emitter, new StringBuilder(), chatroomId);
+        sseMap.put(userId, sse);
     }
 
     public SseEmitter findByUserId(String userId) {
-        return emitters.get(userId);
+        return sseMap.get(userId).emitter();
     }
 
     public void appendSendContent(String userId, Object data){
-        StringBuilder content = sendContents.get(userId);
+        StringBuilder content = sseMap.get(userId).content();
 
         if (content != null) {
             content.append(data);
@@ -43,16 +37,14 @@ public class SseRepository {
             String userId,
             SseEmitter emitter
     ) {
-        if (emitters.remove(userId, emitter)) {
-            sendContents.remove(userId);
-            chatroomIds.remove(userId);
-        }
+        Sse sse = sseMap.get(userId);
+        sseMap.remove(userId, sse);
     }
 
     public void saveChat(String userId){
         chatroomService.saveChat(
-                sendContents.get(userId).toString(),
-                chatroomIds.get(userId)
+                sseMap.get(userId).content().toString(),
+                sseMap.get(userId).chatroomId()
         );
     }
 }
