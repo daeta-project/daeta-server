@@ -14,11 +14,11 @@ public class SseRepository {
 
     private final ChatroomService chatroomService;
 
-    private final Map<String, Sse> sseMap = new ConcurrentHashMap<>();
+    private final Map<String, SseSession> sseMap = new ConcurrentHashMap<>();
 
     public void save(String userId, SseEmitter emitter, String chatroomId) {
-        Sse sse = new Sse(emitter, new StringBuilder(), chatroomId);
-        sseMap.put(userId, sse);
+        SseSession sseSession = new SseSession(emitter, new StringBuilder(), chatroomId);
+        sseMap.put(userId, sseSession);
     }
 
     public SseEmitter findByUserId(String userId) {
@@ -37,8 +37,8 @@ public class SseRepository {
             String userId,
             SseEmitter emitter
     ) {
-        Sse sse = sseMap.get(userId);
-        sseMap.remove(userId, sse);
+        SseSession sseSession = sseMap.get(userId);
+        sseMap.remove(userId, sseSession);
     }
 
     public void saveChat(String userId){
