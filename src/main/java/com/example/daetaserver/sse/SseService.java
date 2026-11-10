@@ -24,21 +24,25 @@ public class SseService {
         emitterRepository.save(userId, emitter, chatroomId);
 
         // 연결 종료 시
-        emitter.onCompletion(() -> emitterRepository.saveChat(userId));
+        emitter.onCompletion(() ->
+                emitterRepository.delete(userId, emitter)
+        );
 
         // 타임아웃 발생 시
         emitter.onTimeout(() -> {
             emitter.complete();
-            emitterRepository.delete(userId);
         });
 
         // 연결 오류 발생 시
         emitter.onError(e ->
-                emitterRepository.delete(userId)
+                emitterRepository.delete(userId, emitter)
         );
 
-        // 최초 연결 이벤트 전송
-        sendEvent(userId, "connect", "SSE 연결 성공");
+        sendEvent(
+                userId,
+                "connect",
+                "연결 성공"
+        );
 
         return emitter;
     }
@@ -62,10 +66,13 @@ public class SseService {
                             .name(eventName)
                             .data(data)
             );
-            emitterRepository.appendSendContent(userId,data); //보내둔 내용 임시 저장
+
+            if ("message".equals(eventName)) {
+                emitterRepository.appendSendContent(userId, data);
+            }
 
         } catch (IOException e) {
-            emitterRepository.delete(userId);
+            emitterRepository.delete(userId, emitter);
             emitter.completeWithError(e);
         }
     }
@@ -77,7 +84,23 @@ public class SseService {
 
         if (emitter != null) {
             emitter.complete();
-            emitterRepository.delete(userId);
+            emitterRepository.delete(userId, emitter);
+        }
+    }
+
+    // 4. 정상적인 AI 응답 완료
+    public void saveChat(String userId) {
+
+        try {
+            emitterRepository.saveChat(userId);
+
+            sendEvent(
+                    userId,
+                    "complete",
+                    "AI 응답이 완료되었습니다."
+            );
+        } finally {
+            disconnect(userId);
         }
     }
 }
