@@ -37,7 +37,7 @@ public class ChatroomController {
         chatroomService.deleteChats(deleteChatDTO, token, id);
     }
 
-    @PostMapping("{id}")
+    @PostMapping("/{id}")
     public void sendChat(
             @PathVariable String id,
             @RequestBody SendMessageDTO sendMessageDTO,
