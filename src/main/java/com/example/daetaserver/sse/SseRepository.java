@@ -32,12 +32,21 @@ public class SseRepository {
     }
 
     public void appendSendContent(String userId, Object data){
-        sendContents.get(userId).append(data);
+        StringBuilder content = sendContents.get(userId);
+
+        if (content != null) {
+            content.append(data);
+        }
     }
 
-    public void delete(String userId) {
-        emitters.remove(userId);
-        sendContents.remove(userId);
+    public void delete(
+            String userId,
+            SseEmitter emitter
+    ) {
+        if (emitters.remove(userId, emitter)) {
+            sendContents.remove(userId);
+            chatroomIds.remove(userId);
+        }
     }
 
     public void saveChat(String userId){
@@ -45,6 +54,5 @@ public class SseRepository {
                 sendContents.get(userId).toString(),
                 chatroomIds.get(userId)
         );
-        delete(userId);
     }
 }
