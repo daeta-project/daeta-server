@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Getter
 public class Chat {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     String id;
 
     @Column(nullable = false)

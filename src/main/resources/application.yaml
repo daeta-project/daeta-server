@@ -3,3 +3,6 @@ spring:
     name: daetaServer
 jwt:
   secret-key: ${SECRET_KEY}
+custom:
+  baseUrl:
+    aiServer: ${AI_SERVER_BASEURL}

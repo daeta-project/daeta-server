@@ -2,12 +2,15 @@ package com.example.daetaserver.chatroom;
 
 import com.example.daetaserver.chat.Chat;
 import com.example.daetaserver.chat.ChatRepository;
+import com.example.daetaserver.chat.Sender;
 import com.example.daetaserver.chat.presentation.dto.ReadChatDTO;
 import com.example.daetaserver.chatbot.ChatbotRepository;
 import com.example.daetaserver.chatroom.presentation.dto.DeleteChatDTO;
+import com.example.daetaserver.chatroom.presentation.dto.SendMessageDTO;
 import com.example.daetaserver.global.error.CustomException;
 import com.example.daetaserver.global.error.ErrorCode;
 import com.example.daetaserver.global.security.JWT.TokenManager;
+import com.example.daetaserver.sse.SseClientService;
 import com.example.daetaserver.user.User;
 import com.example.daetaserver.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class ChatroomService {
     private final ChatbotRepository chatbotRepository;
     private final ChatRepository chatRepository;
     private final TokenManager tokenManager;
+    private final SseClientService sseClientService;
 
     private void isYourChatroom(String chatroomId, String userId){
         Chatroom chatroom = chatroomRepository.findById(chatroomId)
@@ -63,5 +67,27 @@ public class ChatroomService {
         isYourChatroom(id, tokenManager.getSubject(token));
 
         chatRepository.deleteAllByChatroom_IdAndCreatAtBetween(id, dto.startAt(), dto.endAt());
+    }
+
+    public void sendChat(String token, String id, SendMessageDTO sendMessageDTO){
+        Chatroom chatroom = chatroomRepository.findById(id)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
+        String userId = tokenManager.getSubject(token);
+        if (chatroom.getUser().getId().equals(userId)){
+            throw new CustomException(ErrorCode.IS_NOT_YOUR_CHATROOM);
+        }
+        sseClientService.requestSse(userId, chatroom.getId(), sendMessageDTO.message());
+    }
+
+    //sse에서 사용
+    public void saveChat(String content, String chatroomId){
+        Chatroom chatroom = chatroomRepository.findById(chatroomId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
+        chatRepository.save(Chat.builder()
+                .content(content)
+                .chatroom(chatroom)
+                .sender(Sender.CHATBOT)
+                .build()
+        );
     }
 }
