@@ -37,5 +37,8 @@ public class User {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate; // 생성 날짜
+    private LocalDateTime createdAt; // 생성 날짜
+
+    @Builder.Default
+    private LocalDateTime deleteAt = null;
 }
