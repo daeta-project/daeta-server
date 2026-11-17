@@ -79,15 +79,4 @@ public class ChatroomService {
         sseClientService.requestSse(userId, chatroom.getId(), sendMessageDTO.message());
     }
 
-    //sse에서 사용
-    public void saveChat(String content, String chatroomId){
-        Chatroom chatroom = chatroomRepository.findById(chatroomId)
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
-        chatRepository.save(Chat.builder()
-                .content(content)
-                .chatroom(chatroom)
-                .sender(Sender.CHATBOT)
-                .build()
-        );
-    }
 }

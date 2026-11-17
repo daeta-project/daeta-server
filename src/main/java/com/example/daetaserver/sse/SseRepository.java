@@ -1,6 +1,12 @@
 package com.example.daetaserver.sse;
 
-import com.example.daetaserver.chatroom.ChatroomService;
+import com.example.daetaserver.chat.Chat;
+import com.example.daetaserver.chat.ChatRepository;
+import com.example.daetaserver.chat.Sender;
+import com.example.daetaserver.chatroom.Chatroom;
+import com.example.daetaserver.chatroom.ChatroomRepository;
+import com.example.daetaserver.global.error.CustomException;
+import com.example.daetaserver.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -12,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class SseRepository {
 
-    private final ChatroomService chatroomService;
+    private final ChatroomRepository chatroomRepository;
+    private final ChatRepository chatRepository;
 
     private final Map<String, SseSession> sseMap = new ConcurrentHashMap<>();
 
@@ -42,9 +49,16 @@ public class SseRepository {
     }
 
     public void saveChat(String userId){
-        chatroomService.saveChat(
-                sseMap.get(userId).content().toString(),
-                sseMap.get(userId).chatroomId()
+        String content = sseMap.get(userId).content().toString();
+        String chatroomId = sseMap.get(userId).chatroomId();
+
+        Chatroom chatroom = chatroomRepository.findById(chatroomId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
+        chatRepository.save(Chat.builder()
+                .content(content)
+                .chatroom(chatroom)
+                .sender(Sender.CHATBOT)
+                .build()
         );
     }
 }
