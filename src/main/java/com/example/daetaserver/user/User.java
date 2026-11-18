@@ -36,7 +36,7 @@ public class User {
     private String profileUrl;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt; // 생성 날짜
 
     @Builder.Default
