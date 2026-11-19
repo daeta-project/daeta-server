@@ -39,6 +39,12 @@ public class User {
     @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt; // 생성 날짜
 
+    @Column(name = "delete_at")
     @Builder.Default
     private LocalDateTime deleteAt = null;
+    public void withdraw() {
+        if (deleteAt == null) {
+            deleteAt = LocalDateTime.now();
+        }
+    }
 }

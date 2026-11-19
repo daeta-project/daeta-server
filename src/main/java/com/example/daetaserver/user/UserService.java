@@ -6,12 +6,22 @@ import com.example.daetaserver.global.security.JWT.TokenManager;
 import com.example.daetaserver.user.presentation.dto.ReadUserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@DependsOn("withdrawalMigration")
 public class UserService {
     private final UserRepository userRepository;
     private final TokenManager tokenManager;
+
+    @Transactional
+    public void withdraw(String token) {
+        User user = userRepository.findById(tokenManager.getSubject(token))
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        user.withdraw();
+    }
 
     public ReadUserDTO getMe(String token){
         User user=userRepository.findById(tokenManager.getSubject(token))
