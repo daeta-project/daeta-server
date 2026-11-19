@@ -36,6 +36,15 @@ public class User {
     private String profileUrl;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate; // 생성 날짜
+    @Column(name = "createdAt", nullable = false, updatable = false)
+    private LocalDateTime createdAt; // 생성 날짜
+
+    @Column(name = "delete_at")
+    @Builder.Default
+    private LocalDateTime deleteAt = null;
+    public void withdraw() {
+        if (deleteAt == null) {
+            deleteAt = LocalDateTime.now();
+        }
+    }
 }
