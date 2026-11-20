@@ -11,17 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-@DependsOn("withdrawalMigration")
 public class UserService {
     private final UserRepository userRepository;
     private final TokenManager tokenManager;
-
-    @Transactional
-    public void withdraw(String token) {
-        User user = userRepository.findById(tokenManager.getSubject(token))
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-        user.withdraw();
-    }
 
     public ReadUserDTO getMe(String token){
         User user=userRepository.findById(tokenManager.getSubject(token))

@@ -18,12 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
 
-    @DeleteMapping("/me")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void withdraw(@RequestHeader("Authorization") String token) {
-        userService.withdraw(token);
-    }
-
     @GetMapping("/me")
     public ResponseJson<ReadUserDTO> getMe(
             @RequestHeader("Authorization") String token
