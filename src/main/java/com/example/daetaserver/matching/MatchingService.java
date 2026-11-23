@@ -2,6 +2,7 @@ package com.example.daetaserver.matching;
 
 import com.example.daetaserver.chatbot.Chatbot;
 import com.example.daetaserver.chatbot.ChatbotRepository;
+import com.example.daetaserver.global.common.ClientProperties;
 import com.example.daetaserver.global.error.CustomException;
 import com.example.daetaserver.global.error.ErrorCode;
 import com.example.daetaserver.matching.presentation.dto.MatchingResultDTO;
@@ -44,7 +45,7 @@ public class MatchingService {
     ){
 
         List<MatchingResultDTO> matchingResultDTOList = webClient.post()
-                .uri("/api/ai/stream")
+                .uri(ClientProperties.RECOMMEND_URL.getUrl())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .bodyValue(Map.of(

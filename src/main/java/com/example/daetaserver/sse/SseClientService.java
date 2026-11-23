@@ -1,5 +1,6 @@
 package com.example.daetaserver.sse;
 
+import com.example.daetaserver.global.common.ClientProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class SseClientService {
         SseEmitter emitter = sseService.connect(userId, chatroomId);
 
         webClient.post()
-                .uri("/api/ai/stream")
+                .uri(ClientProperties.SSE_URL.getUrl())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .bodyValue(Map.of(
