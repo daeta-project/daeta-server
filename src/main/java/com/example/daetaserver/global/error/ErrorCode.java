@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
+    ERROR_AI_API(HttpStatus.BAD_GATEWAY, "ai와의 통신 중 오류 발생"),
+
     DELETE_USER(HttpStatus.FORBIDDEN, "삭제된 유저 정보"),
 
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "해당하는 유저를 찾을 수 없습니다"),
