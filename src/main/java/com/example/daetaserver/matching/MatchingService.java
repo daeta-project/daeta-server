@@ -10,13 +10,18 @@ import com.example.daetaserver.matching.presentation.dto.RecommendChatbotDTO;
 import com.example.daetaserver.matching.presentation.dto.ResultDTO;
 import com.example.daetaserver.matching.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +42,8 @@ public class MatchingService {
     public List<RecommendChatbotDTO> recommendChatbot(
             List<ResultDTO> resultDTOList
     ){
-        List<RecommendChatbotDTO> recommendChatbotDTOList = new ArrayList<>();
 
-        webClient.post()
+        List<MatchingResultDTO> matchingResultDTOList = webClient.post()
                 .uri("/api/ai/stream")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -47,22 +51,43 @@ public class MatchingService {
                         "results", resultDTOList
                 ))
                 .retrieve()
-                .bodyToMono(MatchingResultDTO.class)
-                .subscribe(result ->{
-                    //데이터 가공
-                    Chatbot chatbot = chatbotRepository.findById(result.id())
-                            .orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_CHATBOT));
-                    recommendChatbotDTOList.add(
-                            new RecommendChatbotDTO(
-                                    result.id(),
-                                    chatbot.getProfileURL(),
-                                    chatbot.getName(),
-                                    result.ranking()
-                            )
-                    );
-                });
+                .onStatus(
+                        HttpStatusCode::isError,
+                        response -> Mono.error(
+                                new CustomException(ErrorCode.ERROR_AI_API)
+                        )
+                )
+                .bodyToMono(new ParameterizedTypeReference<List<MatchingResultDTO>>() {})
+                .block();
 
-        return recommendChatbotDTOList;
 
+        if (matchingResultDTOList!=null) {
+            //챗봇에서 id만 모으기
+            List<String> chatbotIds = matchingResultDTOList
+                    .stream()
+                    .map(MatchingResultDTO::id)
+                    .toList();
+            //위에서 모은 id를 기반으로 모든 챗봇 조회
+            Map<String, Chatbot> chatbotMap = chatbotRepository.findAllById(chatbotIds)
+                    .stream()
+                    .collect(Collectors.toMap(Chatbot::getId, Function.identity()));
+
+            return matchingResultDTOList.stream()
+                    .map(result -> {
+                        //데이터 가공
+                        Chatbot chatbot = chatbotMap.get(result.id());
+                        if (chatbot == null) {
+                            throw new CustomException(ErrorCode.NOT_FOUND_CHATBOT);
+                        }
+                        return new RecommendChatbotDTO(
+                                result.id(),
+                                chatbot.getProfileURL(),
+                                chatbot.getName(),
+                                result.ranking()
+                        );
+                    })
+                    .toList();
+        }
+        return List.of();
     }
 }
