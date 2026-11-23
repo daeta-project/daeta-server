@@ -21,7 +21,7 @@ public class MatchingController {
         return ResponseJson.success(matchingService.getQuestion());
     }
 
-    @GetMapping("/recommend")
+    @PostMapping("/recommend")
     public ResponseJson<List<RecommendChatbotDTO>> getRecommendChatbot(
             @RequestBody List<ResultDTO> resultsDTO
     ){
